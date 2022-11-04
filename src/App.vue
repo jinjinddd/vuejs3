@@ -1,38 +1,29 @@
 <template>
-  <div :class="nameClass">
-    {{ name }}
-  </div> 
-    <input :type="type" :value="name">
+    <input 
+    type="text" 
+    v-model="name"
+    >
     
     <button class="btn btn-primary"
-       @click="updatename"
+       @click="onSubmit"
     >
     Click
     </button>
-
 </template>
 
 <script>
 import { ref } from 'vue';
 export default {  
   setup() {
-    const name = ref('seonjin')
-    const type = ref('number')
-    const nameClass = ref('')
+    const name = ref('seonjin');
 
-    const updatename = () =>{
-      // console.log('hello world');
-      name.value ='pretty woman';
-      type.value = 'text';
-      nameClass.value = 'name';
-      console.log(name);
+    const onSubmit = () =>{
+        console.log(name.value);
     };
-
      return{
      name,
-     updatename,
-     type,
-     nameClass
+     onSubmit,
+   
     };
   }
 }
