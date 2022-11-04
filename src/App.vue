@@ -1,12 +1,15 @@
 <template>
-  <div class="name">
-    {{name}}
-    </div> 
+  <div :class="nameClass">
+    {{ name }}
+  </div> 
+    <input :type="type" :value="name">
+    
     <button class="btn btn-primary"
-    v-on:click="updatename"
+       @click="updatename"
     >
     Click
     </button>
+
 </template>
 
 <script>
@@ -14,19 +17,22 @@ import { ref } from 'vue';
 export default {  
   setup() {
     const name = ref('seonjin')
-    // const greeting = (name) =>{
-    //   return "hello," + name;
-    // }
-    // const greet = greeting(name);
+    const type = ref('number')
+    const nameClass = ref('')
+
     const updatename = () =>{
       // console.log('hello world');
-      name.id =2;
+      name.value ='pretty woman';
+      type.value = 'text';
+      nameClass.value = 'name';
       console.log(name);
     };
 
      return{
      name,
-     updatename
+     updatename,
+     type,
+     nameClass
     };
   }
 }
