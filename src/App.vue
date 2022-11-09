@@ -2,49 +2,22 @@
 <div class = "container">
   <h2> To - Do List </h2>
   <TodoSimpleForm @add-todo="addTodo"/>
- 
-  <!-- 배열에 있는 데이터들을 똑같은 템플릿을 적용해서 반복적으로 보여주고싶을 때  V-For사용 (KEY을 사용해야한다.)-->
     <div v-if="!todolist.length">
       추가된 일정이 없습니다.
     </div>
-    
-    <div 
-      v-for=" (t, index) in todolist" 
-      :key="t.id"
-      class="card mt-3"
-      >
-        <div class="card-body p-2 d-flex align-items-center">
-          <div class = "form-check flex-grow-1">
-            <input 
-              class = "form-check-input"
-              type="checkbox"
-              v-model="t.completed">
-            <label 
-                class = "form-check-label" 
-                :class="{ todo:t.completed }"
-                > 
-                {{t.subject}}
-              </label>
-          </div>
-           <div>
-            <button 
-              class="btn btn-danger btn-sm"
-              @click="deleteTodo(index)">
-              Delete
-              </button>
-           </div>
-        </div>
-    </div>
+    <TodoList :todolist="todolist" @toggle-todo="toggleTodo"/>
 </div>    
 </template>
 
 <script>
 import {ref} from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
+import TodoList from './components/TodoList.vue';
 
 export default {  
   components: {
-    TodoSimpleForm 
+    TodoSimpleForm,
+    TodoList
   },
   setup() {
     const todolist = ref([]);
@@ -57,7 +30,10 @@ export default {
     const addTodo = (todo) =>{
       console.log(todo);
       todolist.value.push(todo);
+      };
 
+      const toggleTodo = (index) =>{
+        console.log(index)
       };
 
       const deleteTodo = (index) =>{
@@ -68,15 +44,13 @@ export default {
         todolist,
         addTodo,
         todoStyle,
-        deleteTodo
+        deleteTodo,
+        toggleTodo
       };
   }
 }
 </script>
 
 <style>
-.todo{
-  color:gray;
-  text-decoration: line-through;
-}
+
 </style>
