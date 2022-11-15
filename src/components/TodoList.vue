@@ -11,8 +11,8 @@
             <input 
               class = "form-check-input"
               type="checkbox"
-              :value = "t.completed"
-              @change = "toggleTodo(index)"
+              :value="t.completed"
+              @change="toggleTodo(index)"
               >
           
             <label 
@@ -23,9 +23,11 @@
               </label>
           </div>
            <div>
+            <!--삭제버튼-->
             <button 
               class="btn btn-danger btn-sm"
-              @click="deleteTodo(index)">   
+              @click="deleteTodo(index)"
+              >   
               Delete
               </button>
            </div>
@@ -42,13 +44,19 @@ export default {
             required: true
         }
     },
-    setup(props, context){
+    emits: ['toggle-todo','delete-todo'],
+    setup(props, {emit}){
         const toggleTodo = (index) =>{
-            context.emit('toggle-todo', index);
+            emit('toggle-todo', index);
+        };
+
+        const deleteTodo = (index) =>{
+          emit('delete-todo', index);
         };
         return{
             toggleTodo,
-        }
+            deleteTodo
+        };
     }
 }
 </script>
