@@ -40,6 +40,19 @@ export default {
       color:'gray'
     };
     const error=ref('');
+    
+
+    const getTodolist = async() => {  //데이터베이스에서 Todo들을 가져온다.
+      try {
+        const res =  await axios.get('http://localhost:3000/todolist');//모든 todoList를 주세요
+        todolist.value = (res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+      getTodolist();
+
+
     const addTodo = async(todo) =>{ //async로 addTodo를 비동기적으로 만들어준다.
         error.value=''; //error메시지 초기화
         //데이터베이스에 todo를 저장한 후 배열에 저장을 한다.axios패키지를 이용(요청을 보낼 때 사용하는 패키지)
@@ -57,16 +70,24 @@ export default {
         }
 
       };
-
-   
+      
       const toggleTodo = (index) =>{
         console.log(index)
         todolist.value[index].completed = !todolist.value[index].completed
       };
 
-      const deleteTodo = (index) =>{
-          todolist.value.splice(index, 1); //splice메서드는 배열의 기존 요소를 삭제 또는 교체하거나 새 요소를 추가하여 배열의 내용을 변경
-      };
+      const deleteTodo = async(index) =>{ //데이터베이스에서 TOdo삭제하기
+         error.value ='';
+        const id = todolist.value[index].id;
+        try {
+         await axios.delete('http://localhost:3000/todolist/' + id);
+         todolist.value.splice(index, 1); //splice메서드는 배열의 기존 요소를 삭제 또는 교체하거나 새 요소를 추가하여 배열의 내용을 변경
+
+        } catch (error) {
+          console.log(error);
+          error.value = '에러발생 삭제 불가!';
+        }
+        };
 
       //검색기능
       const searchText = ref('');
@@ -89,6 +110,7 @@ export default {
         searchText,
         filteredTodos,
         error,
+        getTodolist
       };
   }
 }
