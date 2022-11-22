@@ -6,19 +6,18 @@
                   class="form-control"
                   type="text" 
                   v-model="todo"
-                  placeholder="Type new to-do"
+                  placeholder="새로운 일정을 등록하세요."
               >
             </div>
               <div>
                   <button class="btn btn-primary"
                     type = "submit">
-
-                      Add
+                      추가
                   </button>
               </div>
       </div>
       <div v-show="hasError" style="color: red">
-        (Error)글을 입력하세요.
+        (경고!!)글을 입력하세요.
       </div>
   </form>
 </template>

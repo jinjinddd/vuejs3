@@ -1,6 +1,11 @@
 {
   "todolist": [
     {
+      "subject": "6",
+      "completed": false,
+      "id": 6
+    },
+    {
       "subject": "7",
       "completed": false,
       "id": 7
@@ -42,49 +47,38 @@
     },
     {
       "subject": "14",
-      "completed": true,
+      "completed": false,
       "id": 15
     },
     {
-      "subject": "안녕하세요ㄴㄴㄴㅇㄴㅇㄹsdf",
-      "completed": true,
+      "subject": "15",
+      "completed": false,
+      "id": 16
+    },
+    {
+      "subject": "16",
+      "completed": false,
       "id": 17
     },
     {
-      "subject": "asdf",
-      "completed": true,
-      "body": "sssss",
+      "subject": "17",
+      "completed": false,
       "id": 18
+    },
+    {
+      "subject": "sdf",
+      "completed": false,
+      "id": 19
     },
     {
       "subject": "안녕하세요",
       "completed": false,
-      "body": "새로운 일정입니다.",
-      "id": 19
-    },
-    {
-      "subject": "13131",
-      "completed": false,
-      "body": "13131",
       "id": 20
     },
     {
-      "subject": "ㄴㅇㄹ",
+      "subject": "ㅎㅇㅎㅇ",
       "completed": false,
-      "body": "ㄴㅇㄹ",
       "id": 21
-    },
-    {
-      "subject": "",
-      "completed": false,
-      "body": "ㄴㅇㄹㄴㅇㄹ",
-      "id": 22
-    },
-    {
-      "subject": "김단비 멍청이",
-      "completed": false,
-      "body": "왜냐면 바보이기 때문에",
-      "id": 23
     }
   ]
 }
