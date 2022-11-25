@@ -1,5 +1,6 @@
 <template>
- <h1>일정 관리 페이지</h1>
+ <h1 >일정 관리 페이지</h1>
+ 
  <TodoForm :editing="true"/>
 
 </template>

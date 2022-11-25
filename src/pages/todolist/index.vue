@@ -1,83 +1,60 @@
 <template>
 <div >
-   <div class="d-flex justify-content-between mb-3">
-      <h1> 일정관리 </h1>
-      <button 
-      @click="moveToCreatePage"
-      class="btn btn-primary">
-        일정 등록하기 
-      </button>
+   <div class="d-flex justify-content-between mb-3" >
+     <TodoTitle name="작업을 관리하세요"/>
     </div>
   <!-- 검색input -->
-  <input 
-    class="form-control"
-    type="text" 
-    v-model="searchText"
-    placeholder="일정을 검색하세요"
-    @keyup.enter="searchTodo"
-   >
-   <hr />
-
-
+  <div id="todosearch">
+      <input 
+        class="form-control"
+        type="text" 
+        v-model="searchText"
+        placeholder="일정을 검색하세요"
+        @keyup.enter="searchTodo"
+      >
+        <button 
+          @click="moveToCreatePage"
+          class="btn submit-button">
+            일정 등록하기 
+        </button>
+  </div>
+    <hr />
     <div v-if="!todolist.length">
      표시할 내용이 없습니다.
     </div>
+
     <TodoList 
     :todolist="todolist"  
     @toggle-todo="toggleTodo" 
     @delete-todo="deleteTodo"
     />
-    <!--Bootstrap Pagination-->
-    <hr />
-    <div class="text-center">
-    <nav aria-label="Page navigation example">
-        <ul  class="pagination">
-          <li class="page-item"
-              v-if="currentPage !== 1">
-            <a style="cursor: pointer" class="page-link"  @click="getTodolist(currentPage - 1)">
-              Previous
-            </a>
-          </li>
-              <li 
-              v-for="page in PageNumber"
-              :key="page"
-              class="page-item"
-              :class="currentPage == page ? 'active':''">
-                <a style="cursor: pointer" class="page-link" @click="getTodolist(page)">
-                  {{page}}
-                </a>
-              </li>
-          <li 
-          v-if="PageNumber !== currentPage" 
-          class="page-item">
-            <a style="cursor: pointer" class="page-link" @click="getTodolist(currentPage + 1)">
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-</div> 
-    <ToastVue 
-    v-if="showToast"
-    :message="toastMessage"
-    :type="toastAlertType"
+    <Pagination
+      v-if="todolist.length"
+      :PageNumber="PageNumber"
+      :currentPage="currentPage"
+      @click="getTodolist"
     />
+</div> 
+
 </template>
 
 <script>
 import {ref,computed, watch} from 'vue';
 import TodoList  from '@/components/TodoList.vue';
-import axios from 'axios';
+import axios from '@/axios';
 import ToastVue from '@/components/Toast.vue';
 import {useToast} from '@/composables/toast';
 import { useRouter } from 'vue-router';
+import Pagination from '@/components/Pagination.vue'
+import TodoTitle from '@/components/TodoTitle.vue'
 
 export default {  
   components: {
 
     TodoList,
-    ToastVue
+    ToastVue,
+    Pagination,
+    TodoTitle
   },
   setup() {
     const router = useRouter();
@@ -106,7 +83,7 @@ export default {
       currentPage.value = page; //업데이트를 해야지 현재 페이지가 바뀔때 action이 바뀐다.
       try {
         const res =  await axios.get(
-          `http://localhost:3000/todolist?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}` //작은따옴표(')대신 `로 바꾸면 스크립트 변수를 작성할 수 있다.
+          `todolist?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}` //작은따옴표(')대신 `로 바꾸면 스크립트 변수를 작성할 수 있다.
           );//모든 todoList를 주세요
         DbTodoNumber.value = res.headers['x-total-count'];
         todolist.value = res.data;
@@ -122,7 +99,7 @@ export default {
         error.value=''; //error메시지 초기화
         //데이터베이스에 todo를 저장한 후 배열에 저장을 한다.axios패키지를 이용(요청을 보낼 때 사용하는 패키지)
         try{
-            await axios.post('http://localhost:3000/todolist',{ //await로 잠시기다린다.
+            await axios.post('todolist',{ //await로 잠시기다린다.
         //id는 db에 넣지 않아도 자동으로 1부터 추가된다.
             subject: todo.subject,
             completed: todo.completed,
@@ -144,7 +121,7 @@ export default {
         error.value ='';
         const id = todolist.value[index].id;
         try {
-          await axios.patch('http://localhost:3000/todolist/' + id,{
+          await axios.patch('todolist/' + id,{
           completed: checked    //데이터베이스의 completed변경
           });
 
@@ -156,11 +133,10 @@ export default {
         }
       };
 
-      const deleteTodo = async(index) =>{ //데이터베이스에서 TOdo삭제하기
+      const deleteTodo = async(id) =>{ //데이터베이스에서 TOdo삭제하기
          error.value ='';
-        const id = todolist.value[index].id;
         try {
-         await axios.delete('http://localhost:3000/todolist/' + id);
+         await axios.delete('todolist/' + id);
          //todolist.value.splice(index, 1); //splice메서드는 배열의 기존 요소를 삭제 또는 교체하거나 새 요소를 추가하여 배열의 내용을 변경
          //배열에서 삭제해줘서 할 일 삭제시 페이지 이슈 
           getTodolist(1)
@@ -171,6 +147,7 @@ export default {
         }
         };
 
+      let timeout = null;
       const searchTodo=()=>{
         clearTimeout(timeout);
          getTodolist(1);
@@ -199,7 +176,6 @@ export default {
       const moveToCreatePage =()=>{
           router.push({
             name: 'TodoCreate',
-
           })
       }
 
@@ -226,9 +202,31 @@ export default {
 }
 </script>
 
-<style>
-.pagination{
-    justify-content: center;
+<style lang="scss">
+#todosearch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+  input {
+    margin: 0 5px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    width: 300px;
+    height: 30px;
+  }
+  .v-model-select {
+    margin: 0 5px;
+  }
+  .submit-button {
+    height: 30px;
+    margin: 0 5px;
+    border: none;
+    background: #e494e4;
+    border-radius: 30px;
+    color: white;
+    font-weight: 700;
+  }
 }
-
+  
 </style>

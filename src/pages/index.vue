@@ -1,13 +1,29 @@
 <template>
   <div>Home Page</div>
+  <div>{{ count }}</div>
+  <button @click ="count++">add</button>
 </template>
 
 <script>
-export default {
+import { useCount } from '@/composables/count';
 
+export default {
+    setup(){
+      const { count }= useCount();
+
+      return{
+        count
+      }
+
+    }
 }
 </script>
 
 <style>
-
+ .container {
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  }
 </style>

@@ -1,31 +1,40 @@
 <template>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <router-link class="navbar-brand" :to="{name:'Home'}">
-  Home
-  </router-link>
+  <Navbar/>
+  <div class = "container">
+      <router-view/>
+      <ToastVue />
+  </div>
  
-
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <router-link class="nav-link" :to="{name:'Todolist'}"> 
-        TodoList
-        </router-link>
-      </li>
-    </ul>
-</nav>
-<div
-  class = "container">
-  <router-view/>
-</div>
 </template>
 
 <script>
+import ToastVue from '@/components/Toast.vue'
+import Navbar from '@/components/Navbar.vue'
+import TodoTitle from '@/components/TodoTitle.vue'
 export default{
-
+  name: 'App',
+  components:{
+    ToastVue,
+    Navbar,
+     TodoTitle
+  },
+setup(){
+     
+  }
 }
 </script>
 
+
 <style>
-
-
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+#app {
+  font-family: 'Nanum Gothic', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+html,
+body {
+  background: #faedf0;
+}
 </style>
